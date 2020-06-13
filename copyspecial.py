@@ -36,7 +36,9 @@ def copy_to(path_list, dest_dir):
         filename = os.path.basename(path)
         current_path = os.path.dirname(path)
         abs_path = os.path.join(current_path, dest_dir, filename)
-        shutil.copyfile(path, abs_path)
+        print(current_path)
+        print(abs_path)
+        #shutil.copyfile(path, abs_path)
     return
 
 
@@ -71,10 +73,10 @@ def main(args):
         copy_to(get_special_paths(ns.from_dir), ns.todir)
     elif ns.tozip:
         zip_to(get_special_paths(ns.from_dir), ns.todir)
-    else:
-        path_list = get_special_paths(ns.from_dir)
-        for path in path_list:
-            print(path)
+    
+    path_list = get_special_paths(ns.from_dir)
+    for path in path_list:
+        print(path)
 
 
 if __name__ == "__main__":
