@@ -19,7 +19,7 @@ import argparse
 
 def get_special_paths(dirname):
     """Given a dirname, returns a list of all its special files."""
-    new_list = [os.path.abspath(os.path.join(os.getcwd(), f))
+    new_list = [os.path.abspath(os.path.join(dirname, f))
         for f in (os.listdir(dirname))
         if re.search(r'__(\w+)__', f)]
     return new_list
@@ -36,9 +36,8 @@ def copy_to(path_list, dest_dir):
         filename = os.path.basename(path)
         current_path = os.path.dirname(path)
         abs_path = os.path.join(current_path, dest_dir, filename)
-        print(current_path)
-        print(abs_path)
-        #shutil.copyfile(path, abs_path)
+       
+        shutil.copyfile(path, abs_path)
     return
 
 
