@@ -19,40 +19,41 @@ import argparse
 
 def get_special_paths(dirname):
     """Given a dirname, returns a list of all its special files."""
-    new_list = [os.path.abspath(os.path.join(dirname, f))
-        for f in (os.listdir(dirname))
-        if re.search(r'__(\w+)__', f)]
+    # new_list = [os.path.abspath(os.path.join(dirname, f))
+    #     for f in (os.listdir(dirname))
+    #     if re.findall(r'__(\w+)__', f)]
+    new_list = []
+    for f in os.listdir(dirname):
+        special_file = re.findall(r'__(\w+)__', f)
+        if special_file:
+            new_list.append(os.path.abspath(os.path.join(dirname, f)))
+
     return new_list
 
 
 def copy_to(path_list, dest_dir):
     """Given a list files, copies to a new directory."""
-    try:
+    if not os.path.isdir(dest_dir):
         os.makedirs(dest_dir)
-    except OSError as e:
-        print (e)
-        exit(1)
+
     for path in path_list:
-        filename = os.path.basename(path)
-        current_path = os.path.dirname(path)
-        abs_path = os.path.join(current_path, dest_dir, filename)
+        # filename = os.path.basename(path)
+        # current_path = os.path.dirname(path)
+        # abs_path = os.path.join(current_path, dest_dir, filename)
        
-        shutil.copyfile(path, abs_path)
+        shutil.copy(path, dest_dir)
     return
 
 
 def zip_to(path_list, dest_zip):
     """Given a list of files adds them to a zip"""
-    list_file = ''
-    for path in path_list:
-        list_file += path + ' '
     print("Command I'm going to do:")
-    print('zip -j', list_file)
-    try:
-        subprocess.call(['zip', '-j', dest_zip] +path_list)
-    except OSError as e:
-        print(e)
-        exit(1)
+    for path in path_list:
+    
+        print('zip -j', dest_zip, path)
+
+        subprocess.call(['zip', '-j', dest_zip, path])
+    
     return
 
 
@@ -68,14 +69,15 @@ def main(args):
     if not ns:
         parser.print_usage()
         sys.exit(1)
+    path_list = get_special_paths(ns.from_dir)
     if ns.todir:
         copy_to(get_special_paths(ns.from_dir), ns.todir)
-    elif ns.tozip:
-        zip_to(get_special_paths(ns.from_dir), ns.todir)
+    if ns.tozip:
+        zip_to(path_list, ns.tozip)
     
-    path_list = get_special_paths(ns.from_dir)
-    for path in path_list:
-        print(path)
+    if not ns.todir and not ns.tozip:
+        for path in path_list:
+            print(path)
 
 
 if __name__ == "__main__":
