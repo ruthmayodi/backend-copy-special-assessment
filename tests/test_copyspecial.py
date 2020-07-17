@@ -149,7 +149,7 @@ class TestCopyspecial(unittest.TestCase):
 
     def test_zip_to_1(self):
         """Checking whether special files get zipped"""
-        zip_name = "kenzie-copyspecial-ziptest.zip"
+        zip_name = "/tmp/kenzie-copyspecial-ziptest.zip"
         self.clean(zip_name)
         self.module.zip_to(self.rfs.abs_file_list, zip_name)
         assert os.path.exists(zip_name), "The zipfile was not created."
@@ -205,7 +205,7 @@ class TestCopyspecial(unittest.TestCase):
 
     def test_main_zip_to(self):
         """Check if main() function performs a zip compression"""
-        to_zip = "/tmp/kenzie-copyspl-zipfile.zip"
+        to_zip = "kenzie-copyspl-zipfile.zip"
         self.clean(to_zip)
         args = ["--tozip", to_zip, self.rfs.tmp_dir]
         self.module.main(args)
